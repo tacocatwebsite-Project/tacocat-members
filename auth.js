@@ -431,3 +431,170 @@ if (profileForm) {
 
     loadProfile();
 }
+
+// ----------------------
+// Avatar Upload
+// ----------------------
+
+const avatarFile =
+    document.getElementById("avatarFile");
+
+const uploadAvatarButton =
+    document.getElementById("uploadAvatarButton");
+
+const avatarMessage =
+    document.getElementById("avatarMessage");
+
+if (
+    avatarFile &&
+    uploadAvatarButton &&
+    avatarMessage
+) {
+    uploadAvatarButton.addEventListener(
+        "click",
+        async () => {
+            const file = avatarFile.files[0];
+
+            if (!file) {
+                avatarMessage.textContent =
+                    "Please select an image first.";
+                return;
+            }
+
+            const allowedTypes = [
+                "image/jpeg",
+                "image/png",
+                "image/webp"
+            ];
+
+            if (!allowedTypes.includes(file.type)) {
+                avatarMessage.textContent =
+                    "Only JPG, PNG and WEBP images are allowed.";
+                return;
+            }
+
+            const maximumSize = 2 * 1024 * 1024;
+
+            if (file.size > maximumSize) {
+                avatarMessage.textContent =
+                    "The image must be smaller than 2 MB.";
+                return;
+            }
+
+            uploadAvatarButton.disabled = true;
+            uploadAvatarButton.textContent =
+                "Uploading...";
+
+            avatarMessage.textContent =
+                "Uploading profile photo...";
+
+            const { data: userData, error: userError } =
+                await supabaseClient.auth.getUser();
+
+            if (userError || !userData.user) {
+                window.location.href = "login.html";
+                return;
+            }
+
+            const user = userData.user;
+
+            const fileExtension =
+                file.name
+                    .split(".")
+                    .pop()
+                    .toLowerCase();
+
+            const filePath =
+                `${user.id}/avatar.${fileExtension}`;
+
+            const { error: uploadError } =
+                await supabaseClient.storage
+                    .from("avatars")
+                    .upload(
+                        filePath,
+                        file,
+                        {
+                            cacheControl: "3600",
+                            upsert: true,
+                            contentType: file.type
+                        }
+                    );
+
+            if (uploadError) {
+                avatarMessage.textContent =
+                    uploadError.message;
+
+                uploadAvatarButton.disabled = false;
+                uploadAvatarButton.textContent =
+                    "Upload Photo";
+
+                return;
+            }
+
+            const { data: publicUrlData } =
+                supabaseClient.storage
+                    .from("avatars")
+                    .getPublicUrl(filePath);
+
+            const avatarUrl =
+                `${publicUrlData.publicUrl}?v=${Date.now()}`;
+
+            const { error: metadataError } =
+                await supabaseClient.auth.updateUser({
+                    data: {
+                        avatar_url: avatarUrl
+                    }
+                });
+
+            if (metadataError) {
+                avatarMessage.textContent =
+                    metadataError.message;
+
+                uploadAvatarButton.disabled = false;
+                uploadAvatarButton.textContent =
+                    "Upload Photo";
+
+                return;
+            }
+
+            const previewImage =
+                document.getElementById(
+                    "profilePreviewImage"
+                );
+
+            const previewInitials =
+                document.getElementById(
+                    "profilePreviewInitials"
+                );
+
+            if (previewImage && previewInitials) {
+                previewImage.src = avatarUrl;
+                previewImage.hidden = false;
+                previewInitials.hidden = true;
+            }
+
+            const headerAvatar =
+                document.getElementById(
+                    "profileHeaderAvatar"
+                );
+
+            if (headerAvatar) {
+                headerAvatar.innerHTML = `
+                    <img
+                        src="${avatarUrl}"
+                        alt="Profile avatar"
+                    >
+                `;
+            }
+
+            avatarMessage.textContent =
+                "Profile photo uploaded successfully ✅";
+
+            avatarFile.value = "";
+
+            uploadAvatarButton.disabled = false;
+            uploadAvatarButton.textContent =
+                "Upload Photo";
+        }
+    );
+}
