@@ -314,8 +314,23 @@ if (profileForm) {
         profilePreviewAvatar.textContent =
             initials;
 
-        profileHeaderAvatar.textContent =
-            initials;
+        const previewImage =
+    document.getElementById("profilePreviewImage");
+
+const previewInitials =
+    document.getElementById("profilePreviewInitials");
+
+const currentAvatarUrl =
+    previewImage ? previewImage.getAttribute("src") : "";
+
+if (!currentAvatarUrl) {
+    if (previewInitials) {
+        previewInitials.textContent = initials;
+        previewInitials.hidden = false;
+    }
+
+    profileHeaderAvatar.textContent = initials;
+}
     }
 
     async function loadProfile() {
