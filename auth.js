@@ -453,6 +453,8 @@ if (
     uploadAvatarButton.addEventListener(
         "click",
         async () => {
+            event.preventDefault();
+            
             const file = avatarFile.files[0];
 
             if (!file) {
