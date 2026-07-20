@@ -93,3 +93,42 @@ if (loginForm) {
         window.location.href = "dashboard.html";
     });
 }
+
+// ----------------------
+// Dashboard
+// ----------------------
+
+const welcomeMessage = document.getElementById("welcomeMessage");
+const logoutButton = document.getElementById("logoutButton");
+
+if (welcomeMessage) {
+    async function loadDashboard() {
+        const { data, error } = await supabaseClient.auth.getUser();
+
+        if (error || !data.user) {
+            window.location.href = "login.html";
+            return;
+        }
+
+        const username =
+            data.user.user_metadata?.username || "Member";
+
+        welcomeMessage.innerHTML =
+            `Welcome, <strong>${username}</strong>! 🚀`;
+    }
+
+    loadDashboard();
+}
+
+if (logoutButton) {
+    logoutButton.addEventListener("click", async () => {
+        const { error } = await supabaseClient.auth.signOut();
+
+        if (error) {
+            alert("Unable to log out. Please try again.");
+            return;
+        }
+
+        window.location.href = "login.html";
+    });
+}
