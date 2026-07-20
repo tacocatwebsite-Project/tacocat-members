@@ -84,11 +84,15 @@
                     <h2>My Profile</h2>
 
                     <p>
-                        Update your public TacoCat Crew information.
+                        Update your TacoCat Crew information
+                        and profile image.
                     </p>
                 </div>
 
-                <div class="header-avatar" id="profileHeaderAvatar">
+                <div
+                    class="header-avatar"
+                    id="profileHeaderAvatar"
+                >
                     TC
                 </div>
 
@@ -107,8 +111,19 @@
                         <span class="card-icon">👤</span>
                     </div>
 
-                    <div class="large-profile-avatar" id="profilePreviewAvatar">
-                        TC
+                    <div
+                        class="large-profile-avatar"
+                        id="profilePreviewAvatar"
+                    >
+                        <span id="profilePreviewInitials">
+                            TC
+                        </span>
+
+                        <img
+                            id="profilePreviewImage"
+                            alt="Profile avatar"
+                            hidden
+                        >
                     </div>
 
                     <h3 id="profilePreviewUsername">
@@ -123,6 +138,7 @@
 
                         <div class="info-row">
                             <span>Country</span>
+
                             <strong id="profilePreviewCountry">
                                 Not added
                             </strong>
@@ -130,6 +146,7 @@
 
                         <div class="info-row">
                             <span>X</span>
+
                             <strong id="profilePreviewX">
                                 Not added
                             </strong>
@@ -137,6 +154,7 @@
 
                         <div class="info-row">
                             <span>Telegram</span>
+
                             <strong id="profilePreviewTelegram">
                                 Not added
                             </strong>
@@ -158,6 +176,42 @@
                     </div>
 
                     <form id="profileForm">
+
+                        <div class="profile-form-group">
+
+                            <label for="avatarFile">
+                                Profile Photo
+                            </label>
+
+                            <div class="avatar-upload-box">
+
+                                <input
+                                    id="avatarFile"
+                                    type="file"
+                                    accept="image/jpeg,image/png,image/webp"
+                                >
+
+                                <p>
+                                    JPG, PNG or WEBP. Maximum 2 MB.
+                                </p>
+
+                                <button
+                                    id="uploadAvatarButton"
+                                    class="secondary-button"
+                                    type="button"
+                                >
+                                    Upload Photo
+                                </button>
+
+                            </div>
+
+                            <p
+                                id="avatarMessage"
+                                class="profile-message"
+                                aria-live="polite"
+                            ></p>
+
+                        </div>
 
                         <div class="profile-form-group">
 
