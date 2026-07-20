@@ -102,33 +102,86 @@ const welcomeMessage = document.getElementById("welcomeMessage");
 const logoutButton = document.getElementById("logoutButton");
 
 if (welcomeMessage) {
+
     async function loadDashboard() {
-        const { data, error } = await supabaseClient.auth.getUser();
+
+        const { data, error } =
+            await supabaseClient.auth.getUser();
 
         if (error || !data.user) {
             window.location.href = "login.html";
             return;
         }
 
-        const username =
-            data.user.user_metadata?.username || "Member";
+        const user = data.user;
 
+        const username =
+            user.user_metadata?.username || "Member";
+
+        const email =
+            user.email || "";
+
+        const role =
+            user.user_metadata?.role || "Member";
+
+        const accountId =
+            user.id.substring(0, 8).toUpperCase();
+
+        const joined =
+            new Date(user.created_at).toLocaleDateString();
+
+        const verified =
+            user.email_confirmed_at
+                ? "Verified ✅"
+                : "Pending ❌";
+
+        // Welcome message
         welcomeMessage.innerHTML =
-            `Welcome, <strong>${username}</strong>! 🚀`;
+            `Welcome back, <strong>${username}</strong> 🚀`;
+
+        // Profile Card
+        document.getElementById("dashboardUsername").textContent =
+            username;
+
+        document.getElementById("dashboardEmail").textContent =
+            email;
+
+        document.getElementById("dashboardRole").textContent =
+            role;
+
+        document.getElementById("dashboardAccountId").textContent =
+            accountId;
+
+        document.getElementById("emailVerified").textContent =
+            verified;
+
+        document.getElementById("joinedDate").textContent =
+            joined;
+
+        // Avatar initials
+        const initials =
+            username.substring(0,2).toUpperCase();
+
+        document.getElementById("headerAvatar").textContent =
+            initials;
+
+        document.getElementById("profileAvatar").textContent =
+            initials;
+
     }
 
     loadDashboard();
+
 }
 
 if (logoutButton) {
-    logoutButton.addEventListener("click", async () => {
-        const { error } = await supabaseClient.auth.signOut();
 
-        if (error) {
-            alert("Unable to log out. Please try again.");
-            return;
-        }
+    logoutButton.addEventListener("click", async () => {
+
+        await supabaseClient.auth.signOut();
 
         window.location.href = "login.html";
+
     });
+
 }
