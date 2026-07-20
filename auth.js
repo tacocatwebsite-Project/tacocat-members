@@ -188,3 +188,246 @@ if (logoutButton) {
     });
 
 }
+
+// ----------------------
+// Profile Page
+// ----------------------
+
+const profileForm = document.getElementById("profileForm");
+
+if (profileForm) {
+    const profileUsername =
+        document.getElementById("profileUsername");
+
+    const profileBio =
+        document.getElementById("profileBio");
+
+    const profileCountry =
+        document.getElementById("profileCountry");
+
+    const profileX =
+        document.getElementById("profileX");
+
+    const profileTelegram =
+        document.getElementById("profileTelegram");
+
+    const profileMessage =
+        document.getElementById("profileMessage");
+
+    const saveProfileButton =
+        document.getElementById("saveProfileButton");
+
+    const profilePreviewUsername =
+        document.getElementById("profilePreviewUsername");
+
+    const profilePreviewBio =
+        document.getElementById("profilePreviewBio");
+
+    const profilePreviewCountry =
+        document.getElementById("profilePreviewCountry");
+
+    const profilePreviewX =
+        document.getElementById("profilePreviewX");
+
+    const profilePreviewTelegram =
+        document.getElementById("profilePreviewTelegram");
+
+    const profilePreviewAvatar =
+        document.getElementById("profilePreviewAvatar");
+
+    const profileHeaderAvatar =
+        document.getElementById("profileHeaderAvatar");
+
+    function formatSocialUsername(value) {
+        const cleanedValue = value.trim();
+
+        if (!cleanedValue) {
+            return "";
+        }
+
+        return cleanedValue.startsWith("@")
+            ? cleanedValue
+            : `@${cleanedValue}`;
+    }
+
+    function createInitials(username) {
+        const cleanedUsername = username.trim();
+
+        if (!cleanedUsername) {
+            return "TC";
+        }
+
+        const words = cleanedUsername
+            .split(/\s+/)
+            .filter(Boolean);
+
+        if (words.length >= 2) {
+            return (
+                words[0].charAt(0) +
+                words[1].charAt(0)
+            ).toUpperCase();
+        }
+
+        return cleanedUsername
+            .substring(0, 2)
+            .toUpperCase();
+    }
+
+    function updateProfilePreview() {
+        const username =
+            profileUsername.value.trim() || "Member";
+
+        const bio =
+            profileBio.value.trim() ||
+            "No biography added yet.";
+
+        const country =
+            profileCountry.value.trim() ||
+            "Not added";
+
+        const xUsername =
+            formatSocialUsername(profileX.value) ||
+            "Not added";
+
+        const telegramUsername =
+            formatSocialUsername(profileTelegram.value) ||
+            "Not added";
+
+        const initials =
+            createInitials(username);
+
+        profilePreviewUsername.textContent =
+            username;
+
+        profilePreviewBio.textContent =
+            bio;
+
+        profilePreviewCountry.textContent =
+            country;
+
+        profilePreviewX.textContent =
+            xUsername;
+
+        profilePreviewTelegram.textContent =
+            telegramUsername;
+
+        profilePreviewAvatar.textContent =
+            initials;
+
+        profileHeaderAvatar.textContent =
+            initials;
+    }
+
+    async function loadProfile() {
+        profileMessage.textContent =
+            "Loading profile...";
+
+        const { data, error } =
+            await supabaseClient.auth.getUser();
+
+        if (error || !data.user) {
+            window.location.href = "login.html";
+            return;
+        }
+
+        const user = data.user;
+        const metadata = user.user_metadata || {};
+
+        profileUsername.value =
+            metadata.username || "";
+
+        profileBio.value =
+            metadata.bio || "";
+
+        profileCountry.value =
+            metadata.country || "";
+
+        profileX.value =
+            metadata.x_username || "";
+
+        profileTelegram.value =
+            metadata.telegram_username || "";
+
+        updateProfilePreview();
+
+        profileMessage.textContent = "";
+    }
+
+    const profileInputs = [
+        profileUsername,
+        profileBio,
+        profileCountry,
+        profileX,
+        profileTelegram
+    ];
+
+    profileInputs.forEach((input) => {
+        input.addEventListener(
+            "input",
+            updateProfilePreview
+        );
+    });
+
+    profileForm.addEventListener(
+        "submit",
+        async (event) => {
+            event.preventDefault();
+
+            const username =
+                profileUsername.value.trim();
+
+            if (!username) {
+                profileMessage.textContent =
+                    "Username is required.";
+                return;
+            }
+
+            saveProfileButton.disabled = true;
+            saveProfileButton.textContent =
+                "Saving...";
+
+            profileMessage.textContent =
+                "Saving profile...";
+
+            const { error } =
+                await supabaseClient.auth.updateUser({
+                    data: {
+                        username,
+                        bio: profileBio.value.trim(),
+                        country:
+                            profileCountry.value.trim(),
+                        x_username:
+                            formatSocialUsername(
+                                profileX.value
+                            ),
+                        telegram_username:
+                            formatSocialUsername(
+                                profileTelegram.value
+                            )
+                    }
+                });
+
+            if (error) {
+                profileMessage.textContent =
+                    error.message;
+
+                saveProfileButton.disabled = false;
+                saveProfileButton.textContent =
+                    "Save Profile";
+
+                return;
+            }
+
+            updateProfilePreview();
+
+            profileMessage.textContent =
+                "Profile saved successfully ✅";
+
+            saveProfileButton.disabled = false;
+            saveProfileButton.textContent =
+                "Save Profile";
+        }
+    );
+
+    loadProfile();
+}
