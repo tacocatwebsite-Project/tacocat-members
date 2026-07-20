@@ -332,6 +332,31 @@ if (profileForm) {
 
         const user = data.user;
         const metadata = user.user_metadata || {};
+        const avatarUrl = metadata.avatar_url || "";
+
+const previewImage =
+    document.getElementById("profilePreviewImage");
+
+const previewInitials =
+    document.getElementById("profilePreviewInitials");
+
+const headerAvatar =
+    document.getElementById("profileHeaderAvatar");
+
+if (avatarUrl) {
+
+    if (previewImage && previewInitials) {
+        previewImage.src = avatarUrl;
+        previewImage.hidden = false;
+        previewInitials.hidden = true;
+    }
+
+    if (headerAvatar) {
+        headerAvatar.innerHTML = `
+            <img src="${avatarUrl}" alt="Profile Avatar">
+        `;
+    }
+}
 
         profileUsername.value =
             metadata.username || "";
