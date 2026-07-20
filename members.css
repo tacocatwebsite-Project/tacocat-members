@@ -938,5 +938,6 @@ grid-template-columns:1fr;
     display: block;
 
     object-fit: cover;
+   object-position: center;
     border-radius: 50%;
 }
