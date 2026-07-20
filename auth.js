@@ -311,9 +311,6 @@ if (profileForm) {
         profilePreviewTelegram.textContent =
             telegramUsername;
 
-        profilePreviewAvatar.textContent =
-            initials;
-
         const previewImage =
     document.getElementById("profilePreviewImage");
 
