@@ -45,7 +45,20 @@ if (registerForm) {
             alert(error.message);
             return;
         }
+if (data.user) {
 
+    await supabaseClient
+    .from("profiles")
+    .upsert({
+        id: data.user.id,
+        username: username,
+        role: "Member",
+        membership: "Free",
+        points: 0,
+        missions: 0,
+        badges: 0
+    });
+}
         alert(
             "Account created! Please check your email to verify your account."
         );
