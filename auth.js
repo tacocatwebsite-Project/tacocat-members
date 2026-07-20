@@ -161,16 +161,47 @@ if (welcomeMessage) {
         document.getElementById("joinedDate").textContent =
             joined;
 
-        // Avatar initials
-        const initials =
-            username.substring(0,2).toUpperCase();
+// Avatar image or initials
+const avatarUrl =
+    user.user_metadata?.avatar_url || "";
 
-        document.getElementById("headerAvatar").textContent =
-            initials;
+const headerAvatar =
+    document.getElementById("headerAvatar");
 
-        document.getElementById("profileAvatar").textContent =
-            initials;
+const profileAvatar =
+    document.getElementById("profileAvatar");
 
+if (avatarUrl) {
+    if (headerAvatar) {
+        headerAvatar.innerHTML = `
+            <img
+                src="${avatarUrl}"
+                alt="Profile avatar"
+            >
+        `;
+    }
+
+    if (profileAvatar) {
+        profileAvatar.innerHTML = `
+            <img
+                src="${avatarUrl}"
+                alt="Profile avatar"
+            >
+        `;
+    }
+} else {
+    const initials =
+        username.substring(0, 2).toUpperCase();
+
+    if (headerAvatar) {
+        headerAvatar.textContent = initials;
+    }
+
+    if (profileAvatar) {
+        profileAvatar.textContent = initials;
+    }
+}
+        
     }
 
     loadDashboard();
