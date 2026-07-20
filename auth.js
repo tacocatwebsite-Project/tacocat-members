@@ -35,7 +35,9 @@ if (registerForm) {
             options: {
                 data: {
                     username: username
-                }
+                },
+                emailRedirectTo:
+                      "https://tacocatwebsite-project.github.io/tacocat-members/login.html"
             }
         });
 
