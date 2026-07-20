@@ -1,1 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
 
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>TacoCat Members Dashboard</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <link rel="stylesheet" href="members.css">
+</head>
+
+<body class="dashboard-page">
+
+    <div class="app-layout">
+
+        <!-- Mobile menu button -->
+        <button
+            id="menuButton"
+            class="menu-button"
+            type="button"
+            aria-label="Open menu"
+        >
+            ☰
+        </button>
+
+        <!-- Sidebar -->
+        <aside id="sidebar" class="sidebar">
+
+            <div class="sidebar-brand">
+                <div class="brand-icon">🌮</div>
+
+                <div>
+                    <h1>TacoCat</h1>
+                    <span>Members Portal</span>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+
+                <a class="nav-link active" href="dashboard.html">
+                    <span>🏠</span>
+                    Dashboard
+                </a>
+
+                <a class="nav-link" href="profile.html">
+                    <span>👤</span>
+                    My Profile
+                </a>
+
+                <a class="nav-link" href="#membershipCard">
+                    <span>💎</span>
+                    Account Status
+                </a>
+
+                <a class="nav-link" href="#communityCard">
+                    <span>🏆</span>
+                    Community
+                </a>
+
+            </nav>
+
+            <button
+                id="logoutButton"
+                class="sidebar-logout"
+                type="button"
+            >
+                <span>🚪</span>
+                Logout
+            </button>
+
+        </aside>
+
+        <!-- Main dashboard -->
+        <main class="dashboard-main">
+
+            <header class="dashboard-header">
+
+                <div>
+                    <p class="eyebrow">TACO CREW COMMAND CENTER</p>
+
+                    <h2>Member Dashboard</h2>
+
+                    <p id="welcomeMessage">
+                        Loading your account...
+                    </p>
+                </div>
+
+                <div class="header-avatar" id="headerAvatar">
+                    TC
+                </div>
+
+            </header>
+
+            <!-- Overview cards -->
+            <section class="dashboard-grid">
+
+                <article class="dashboard-card profile-card">
+
+                    <div class="card-heading">
+                        <div>
+                            <p class="card-label">PROFILE</p>
+                            <h3>Member Information</h3>
+                        </div>
+
+                        <span class="card-icon">👤</span>
+                    </div>
+
+                    <div class="profile-summary">
+
+                        <div class="profile-avatar" id="profileAvatar">
+                            TC
+                        </div>
+
+                        <div>
+                            <h4 id="dashboardUsername">
+                                Member
+                            </h4>
+
+                            <p id="dashboardEmail">
+                                Loading email...
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="info-list">
+
+                        <div class="info-row">
+                            <span>Role</span>
+
+                            <strong id="dashboardRole">
+                                Member
+                            </strong>
+                        </div>
+
+                        <div class="info-row">
+                            <span>Account ID</span>
+
+                            <strong id="dashboardAccountId">
+                                Loading...
+                            </strong>
+                        </div>
+
+                    </div>
+
+                    <a class="secondary-button" href="profile.html">
+                        Edit Profile
+                    </a>
+
+                </article>
+
+                <article
+                    id="membershipCard"
+                    class="dashboard-card"
+                >
+
+                    <div class="card-heading">
+                        <div>
+                            <p class="card-label">ACCOUNT</p>
+                            <h3>Account Status</h3>
+                        </div>
+
+                        <span class="card-icon">💎</span>
+                    </div>
+
+                    <div class="status-box">
+
+                        <span class="status-dot"></span>
+
+                        <div>
+                            <small>Current status</small>
+
+                            <strong id="accountStatus">
+                                Registered
+                            </strong>
+                        </div>
+
+                    </div>
+
+                    <div class="info-list">
+
+                        <div class="info-row">
+                            <span>Email verified</span>
+
+                            <strong id="emailVerified">
+                                Checking...
+                            </strong>
+                        </div>
+
+                        <div class="info-row">
+                            <span>Joined</span>
+
+                            <strong id="joinedDate">
+                                Loading...
+                            </strong>
+                        </div>
+
+                    </div>
+
+                </article>
+
+                <article
+                    id="communityCard"
+                    class="dashboard-card"
+                >
+
+                    <div class="card-heading">
+                        <div>
+                            <p class="card-label">COMMUNITY</p>
+                            <h3>Crew Progress</h3>
+                        </div>
+
+                        <span class="card-icon">🏆</span>
+                    </div>
+
+                    <div class="stats-grid">
+
+                        <div class="stat-box">
+                            <strong>0</strong>
+                            <span>Points</span>
+                        </div>
+
+                        <div class="stat-box">
+                            <strong>0</strong>
+                            <span>Missions</span>
+                        </div>
+
+                        <div class="stat-box">
+                            <strong>0</strong>
+                            <span>Badges</span>
+                        </div>
+
+                    </div>
+
+                    <p class="card-note">
+                        Community achievements will appear here
+                        as new features are activated.
+                    </p>
+
+                </article>
+
+                <article class="dashboard-card transmission-card">
+
+                    <div class="card-heading">
+                        <div>
+                            <p class="card-label">SIGNAL</p>
+                            <h3>Latest Transmission</h3>
+                        </div>
+
+                        <span class="card-icon">📡</span>
+                    </div>
+
+                    <div class="transmission-message">
+                        <span>TRANSMISSION RECEIVED</span>
+
+                        <p>
+                            Welcome to the TacoCat Crew command
+                            center. Your account connection is active.
+                        </p>
+                    </div>
+
+                </article>
+
+            </section>
+
+        </main>
+
+    </div>
+
+    <script src="auth.js"></script>
+
+    <script>
+        const menuButton =
+            document.getElementById("menuButton");
+
+        const sidebar =
+            document.getElementById("sidebar");
+
+        if (menuButton && sidebar) {
+            menuButton.addEventListener("click", () => {
+                sidebar.classList.toggle("sidebar-open");
+            });
+        }
+    </script>
+
+</body>
+</html>
