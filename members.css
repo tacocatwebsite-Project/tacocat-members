@@ -462,9 +462,10 @@ a:hover {
 .profile-avatar {
     display: grid;
     place-items: center;
-
+   
     border-radius: 50%;
-
+   overflow: hidden;
+   
     background: linear-gradient(
         135deg,
         #ffb23f,
