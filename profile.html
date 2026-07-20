@@ -1,1 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
 
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>My Profile | TacoCat Members</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <link rel="stylesheet" href="members.css">
+</head>
+
+<body class="dashboard-page">
+
+    <div class="app-layout">
+
+        <button
+            id="menuButton"
+            class="menu-button"
+            type="button"
+            aria-label="Open menu"
+        >
+            ☰
+        </button>
+
+        <aside id="sidebar" class="sidebar">
+
+            <div class="sidebar-brand">
+                <div class="brand-icon">🌮</div>
+
+                <div>
+                    <h1>TacoCat</h1>
+                    <span>Members Portal</span>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+
+                <a class="nav-link" href="dashboard.html">
+                    <span>🏠</span>
+                    Dashboard
+                </a>
+
+                <a class="nav-link active" href="profile.html">
+                    <span>👤</span>
+                    My Profile
+                </a>
+
+                <a class="nav-link" href="dashboard.html#membershipCard">
+                    <span>💎</span>
+                    Account Status
+                </a>
+
+                <a class="nav-link" href="dashboard.html#communityCard">
+                    <span>🏆</span>
+                    Community
+                </a>
+
+            </nav>
+
+            <button
+                id="logoutButton"
+                class="sidebar-logout"
+                type="button"
+            >
+                <span>🚪</span>
+                Logout
+            </button>
+
+        </aside>
+
+        <main class="dashboard-main">
+
+            <header class="dashboard-header">
+
+                <div>
+                    <p class="eyebrow">TACO CREW MEMBER PROFILE</p>
+
+                    <h2>My Profile</h2>
+
+                    <p>
+                        Update your public TacoCat Crew information.
+                    </p>
+                </div>
+
+                <div class="header-avatar" id="profileHeaderAvatar">
+                    TC
+                </div>
+
+            </header>
+
+            <section class="profile-page-grid">
+
+                <article class="dashboard-card profile-preview-card">
+
+                    <div class="card-heading">
+                        <div>
+                            <p class="card-label">PREVIEW</p>
+                            <h3>Profile Preview</h3>
+                        </div>
+
+                        <span class="card-icon">👤</span>
+                    </div>
+
+                    <div class="large-profile-avatar" id="profilePreviewAvatar">
+                        TC
+                    </div>
+
+                    <h3 id="profilePreviewUsername">
+                        Member
+                    </h3>
+
+                    <p id="profilePreviewBio">
+                        No biography added yet.
+                    </p>
+
+                    <div class="profile-preview-details">
+
+                        <div class="info-row">
+                            <span>Country</span>
+                            <strong id="profilePreviewCountry">
+                                Not added
+                            </strong>
+                        </div>
+
+                        <div class="info-row">
+                            <span>X</span>
+                            <strong id="profilePreviewX">
+                                Not added
+                            </strong>
+                        </div>
+
+                        <div class="info-row">
+                            <span>Telegram</span>
+                            <strong id="profilePreviewTelegram">
+                                Not added
+                            </strong>
+                        </div>
+
+                    </div>
+
+                </article>
+
+                <article class="dashboard-card profile-form-card">
+
+                    <div class="card-heading">
+                        <div>
+                            <p class="card-label">EDIT PROFILE</p>
+                            <h3>Member Information</h3>
+                        </div>
+
+                        <span class="card-icon">✏️</span>
+                    </div>
+
+                    <form id="profileForm">
+
+                        <div class="profile-form-group">
+
+                            <label for="profileUsername">
+                                Username
+                            </label>
+
+                            <input
+                                id="profileUsername"
+                                type="text"
+                                maxlength="30"
+                                placeholder="Your username"
+                                required
+                            >
+
+                        </div>
+
+                        <div class="profile-form-group">
+
+                            <label for="profileBio">
+                                Biography
+                            </label>
+
+                            <textarea
+                                id="profileBio"
+                                maxlength="160"
+                                placeholder="Tell the TacoCat Crew about yourself"
+                            ></textarea>
+
+                            <small>
+                                Maximum 160 characters
+                            </small>
+
+                        </div>
+
+                        <div class="profile-form-group">
+
+                            <label for="profileCountry">
+                                Country
+                            </label>
+
+                            <input
+                                id="profileCountry"
+                                type="text"
+                                maxlength="50"
+                                placeholder="Example: United States"
+                            >
+
+                        </div>
+
+                        <div class="profile-form-group">
+
+                            <label for="profileX">
+                                X username
+                            </label>
+
+                            <input
+                                id="profileX"
+                                type="text"
+                                maxlength="30"
+                                placeholder="@username"
+                            >
+
+                        </div>
+
+                        <div class="profile-form-group">
+
+                            <label for="profileTelegram">
+                                Telegram username
+                            </label>
+
+                            <input
+                                id="profileTelegram"
+                                type="text"
+                                maxlength="30"
+                                placeholder="@username"
+                            >
+
+                        </div>
+
+                        <button
+                            id="saveProfileButton"
+                            type="submit"
+                        >
+                            Save Profile
+                        </button>
+
+                        <p
+                            id="profileMessage"
+                            class="profile-message"
+                            aria-live="polite"
+                        ></p>
+
+                    </form>
+
+                </article>
+
+            </section>
+
+        </main>
+
+    </div>
+
+    <script src="auth.js"></script>
+
+    <script>
+        const menuButton =
+            document.getElementById("menuButton");
+
+        const sidebar =
+            document.getElementById("sidebar");
+
+        if (menuButton && sidebar) {
+            menuButton.addEventListener("click", () => {
+                sidebar.classList.toggle("sidebar-open");
+            });
+        }
+    </script>
+
+</body>
+</html>
