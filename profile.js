@@ -1,5 +1,10 @@
-// Backup utilities for the Profile page.
-// These prevent the page from failing if utils.js is not loaded.
+// ========================================
+// TacoCat Members - Profile Page
+// ========================================
+
+// ----------------------------------------
+// Utility functions
+// ----------------------------------------
 
 function profileFormatSocialUsername(value) {
     const cleanedValue = (value || "").trim();
@@ -35,77 +40,83 @@ function profileCreateInitials(username) {
         .substring(0, 2)
         .toUpperCase();
 }
+
+// ----------------------------------------
+// Page elements
+// ----------------------------------------
+
 const profileForm =
     document.getElementById("profileForm");
 
 const profileLogoutButton =
     document.getElementById("logoutButton");
 
+const avatarFile =
+    document.getElementById("avatarFile");
+
+const uploadAvatarButton =
+    document.getElementById("uploadAvatarButton");
+
+const avatarMessage =
+    document.getElementById("avatarMessage");
+
+// ----------------------------------------
+// Profile page
+// ----------------------------------------
+
 if (profileForm) {
     const profileUsername =
-        document.getElementById(
-            "profileUsername"
-        );
+        document.getElementById("profileUsername");
 
     const profileBio =
-        document.getElementById(
-            "profileBio"
-        );
+        document.getElementById("profileBio");
 
     const profileCountry =
-        document.getElementById(
-            "profileCountry"
-        );
+        document.getElementById("profileCountry");
 
     const profileX =
-        document.getElementById(
-            "profileX"
-        );
+        document.getElementById("profileX");
 
     const profileTelegram =
-        document.getElementById(
-            "profileTelegram"
-        );
+        document.getElementById("profileTelegram");
 
     const profileMessage =
-        document.getElementById(
-            "profileMessage"
-        );
+        document.getElementById("profileMessage");
 
     const saveProfileButton =
-        document.getElementById(
-            "saveProfileButton"
-        );
+        document.getElementById("saveProfileButton");
 
     const profilePreviewUsername =
-        document.getElementById(
-            "profilePreviewUsername"
-        );
+        document.getElementById("profilePreviewUsername");
 
     const profilePreviewBio =
-        document.getElementById(
-            "profilePreviewBio"
-        );
+        document.getElementById("profilePreviewBio");
 
     const profilePreviewCountry =
-        document.getElementById(
-            "profilePreviewCountry"
-        );
+        document.getElementById("profilePreviewCountry");
 
     const profilePreviewX =
-        document.getElementById(
-            "profilePreviewX"
-        );
+        document.getElementById("profilePreviewX");
 
     const profilePreviewTelegram =
-        document.getElementById(
-            "profilePreviewTelegram"
-        );
+        document.getElementById("profilePreviewTelegram");
+
+    const profilePreviewImage =
+        document.getElementById("profilePreviewImage");
+
+    const profilePreviewInitials =
+        document.getElementById("profilePreviewInitials");
+
+    const profileHeaderAvatar =
+        document.getElementById("profileHeaderAvatar");
+
+    // ----------------------------------------
+    // Update profile preview
+    // ----------------------------------------
 
     function updateProfilePreview() {
         const username =
-            profileUsername.value.trim() ||
-            "Member";
+            profileUsername.value.trim() || "Member";
 
         const bio =
             profileBio.value.trim() ||
@@ -116,17 +127,17 @@ if (profileForm) {
             "Not added";
 
         const xUsername =
-            formatSocialUsername(
+            profileFormatSocialUsername(
                 profileX.value
             ) || "Not added";
 
         const telegramUsername =
-            formatSocialUsername(
+            profileFormatSocialUsername(
                 profileTelegram.value
             ) || "Not added";
 
         const initials =
-            createInitials(username);
+            profileCreateInitials(username);
 
         if (profilePreviewUsername) {
             profilePreviewUsername.textContent =
@@ -153,33 +164,19 @@ if (profileForm) {
                 telegramUsername;
         }
 
-        const previewImage =
-            document.getElementById(
-                "profilePreviewImage"
-            );
-
-        const previewInitials =
-            document.getElementById(
-                "profilePreviewInitials"
-            );
-
         const currentAvatarUrl =
-            previewImage
-                ? previewImage.getAttribute("src")
+            profilePreviewImage
+                ? profilePreviewImage.getAttribute("src")
                 : "";
 
         if (!currentAvatarUrl) {
-            if (previewInitials) {
-                previewInitials.textContent =
+            if (profilePreviewInitials) {
+                profilePreviewInitials.textContent =
                     initials;
 
-                previewInitials.hidden = false;
+                profilePreviewInitials.hidden =
+                    false;
             }
-
-            const profileHeaderAvatar =
-                document.getElementById(
-                    "profileHeaderAvatar"
-                );
 
             if (profileHeaderAvatar) {
                 profileHeaderAvatar.textContent =
@@ -188,116 +185,201 @@ if (profileForm) {
         }
     }
 
-    async function loadProfile() {
-        profileMessage.textContent =
-            "Loading profile...";
-
-        const { data, error } =
-            await supabaseClient.auth.getUser();
-
-        if (error || !data.user) {
-            window.location.href =
-                "login.html";
-            return;
-        }
-
-        const user = data.user;
-
-        const {
-            data: profile,
-            error: profileError
-        } = await supabaseClient
-            .from("profiles")
-            .select("*")
-            .eq("id", user.id)
-            .maybeSingle();
-
-        if (profileError) {
-            profileMessage.textContent =
-                profileError.message;
-            return;
-        }
-
-        const metadata =
-            user.user_metadata || {};
-
-        const profileData =
-            profile || metadata;
-
-        profileUsername.value =
-            profileData.username || "";
-
-        profileBio.value =
-            profileData.bio || "";
-
-        profileCountry.value =
-            profileData.country || "";
-
-        profileX.value =
-            profileData.x_username || "";
-
-        profileTelegram.value =
-            profileData.telegram_username || "";
-
-        const avatarUrl =
-            profileData.avatar_url ||
-            metadata.avatar_url ||
-            "";
-
-        renderProfileAvatar(avatarUrl);
-
-        updateProfilePreview();
-
-        profileMessage.textContent = "";
-    }
+    // ----------------------------------------
+    // Render profile avatar
+    // ----------------------------------------
 
     function renderProfileAvatar(
-        avatarUrl
+        avatarUrl,
+        username = "Member"
     ) {
-        const previewImage =
-            document.getElementById(
-                "profilePreviewImage"
-            );
-
-        const previewInitials =
-            document.getElementById(
-                "profilePreviewInitials"
-            );
-
-        const headerAvatar =
-            document.getElementById(
-                "profileHeaderAvatar"
-            );
+        const initials =
+            profileCreateInitials(username);
 
         if (!avatarUrl) {
+            if (profilePreviewImage) {
+                profilePreviewImage.removeAttribute(
+                    "src"
+                );
+
+                profilePreviewImage.hidden =
+                    true;
+            }
+
+            if (profilePreviewInitials) {
+                profilePreviewInitials.textContent =
+                    initials;
+
+                profilePreviewInitials.hidden =
+                    false;
+            }
+
+            if (profileHeaderAvatar) {
+                profileHeaderAvatar.innerHTML =
+                    "";
+
+                profileHeaderAvatar.textContent =
+                    initials;
+            }
+
             return;
         }
 
-        if (previewImage) {
-            previewImage.src =
+        if (profilePreviewImage) {
+            profilePreviewImage.src =
                 avatarUrl;
 
-            previewImage.hidden =
+            profilePreviewImage.hidden =
                 false;
+
+            profilePreviewImage.onerror =
+                () => {
+                    profilePreviewImage.hidden =
+                        true;
+
+                    profilePreviewInitials.hidden =
+                        false;
+
+                    profilePreviewInitials.textContent =
+                        initials;
+                };
         }
 
-        if (previewInitials) {
-            previewInitials.hidden =
+        if (profilePreviewInitials) {
+            profilePreviewInitials.hidden =
                 true;
         }
 
-        if (headerAvatar) {
-            headerAvatar.innerHTML = "";
+        if (profileHeaderAvatar) {
+            profileHeaderAvatar.innerHTML =
+                "";
 
             const image =
                 document.createElement("img");
 
-            image.src = avatarUrl;
-            image.alt = "Profile avatar";
+            image.src =
+                avatarUrl;
 
-            headerAvatar.appendChild(image);
+            image.alt =
+                "Profile avatar";
+
+            image.onerror =
+                () => {
+                    profileHeaderAvatar.innerHTML =
+                        "";
+
+                    profileHeaderAvatar.textContent =
+                        initials;
+                };
+
+            profileHeaderAvatar.appendChild(
+                image
+            );
         }
     }
+
+    // ----------------------------------------
+    // Load profile
+    // ----------------------------------------
+
+    async function loadProfile() {
+        if (profileMessage) {
+            profileMessage.textContent =
+                "Loading profile...";
+        }
+
+        try {
+            const {
+                data: userData,
+                error: userError
+            } = await supabaseClient.auth
+                .getUser();
+
+            if (
+                userError ||
+                !userData.user
+            ) {
+                window.location.href =
+                    "login.html";
+
+                return;
+            }
+
+            const user =
+                userData.user;
+
+            const metadata =
+                user.user_metadata || {};
+
+            const {
+                data: profile,
+                error: profileError
+            } = await supabaseClient
+                .from("profiles")
+                .select("*")
+                .eq("id", user.id)
+                .maybeSingle();
+
+            if (profileError) {
+                throw profileError;
+            }
+
+            const profileData =
+                profile || {};
+
+            const username =
+                profileData.username ||
+                metadata.username ||
+                "Member";
+
+            profileUsername.value =
+                username;
+
+            profileBio.value =
+                profileData.bio || "";
+
+            profileCountry.value =
+                profileData.country || "";
+
+            profileX.value =
+                profileData.x_username || "";
+
+            profileTelegram.value =
+                profileData.telegram_username || "";
+
+            const avatarUrl =
+                profileData.avatar_url ||
+                metadata.avatar_url ||
+                "";
+
+            renderProfileAvatar(
+                avatarUrl,
+                username
+            );
+
+            updateProfilePreview();
+
+            if (profileMessage) {
+                profileMessage.textContent =
+                    "";
+            }
+        } catch (error) {
+            console.error(
+                "Profile loading error:",
+                error
+            );
+
+            if (profileMessage) {
+                profileMessage.textContent =
+                    error.message ||
+                    "Unable to load your profile.";
+            }
+        }
+    }
+
+    // ----------------------------------------
+    // Live preview
+    // ----------------------------------------
 
     const profileInputs = [
         profileUsername,
@@ -316,6 +398,10 @@ if (profileForm) {
         }
     });
 
+    // ----------------------------------------
+    // Save profile
+    // ----------------------------------------
+
     profileForm.addEventListener(
         "submit",
         async (event) => {
@@ -327,6 +413,7 @@ if (profileForm) {
             if (!username) {
                 profileMessage.textContent =
                     "Username is required.";
+
                 return;
             }
 
@@ -339,322 +426,419 @@ if (profileForm) {
             profileMessage.textContent =
                 "Saving profile...";
 
-            const {
-                data: userData,
-                error: userError
-            } = await supabaseClient.auth
-                .getUser();
+            try {
+                const {
+                    data: userData,
+                    error: userError
+                } = await supabaseClient.auth
+                    .getUser();
 
-            if (
-                userError ||
-                !userData.user
-            ) {
-                window.location.href =
-                    "login.html";
-                return;
-            }
+                if (
+                    userError ||
+                    !userData.user
+                ) {
+                    window.location.href =
+                        "login.html";
 
-            const user =
-                userData.user;
+                    return;
+                }
 
-            const {
-                data: existingProfile
-            } = await supabaseClient
-                .from("profiles")
-                .select("avatar_url")
-                .eq("id", user.id)
-                .maybeSingle();
+                const user =
+                    userData.user;
 
-            const {
-                error: saveError
-            } = await supabaseClient
-                .from("profiles")
-                .upsert({
+                const {
+                    data: existingProfile,
+                    error: existingProfileError
+                } = await supabaseClient
+                    .from("profiles")
+                    .select(
+                        "avatar_url, role, membership, points, missions, badges"
+                    )
+                    .eq("id", user.id)
+                    .maybeSingle();
+
+                if (existingProfileError) {
+                    throw existingProfileError;
+                }
+
+                const profileInformation = {
                     id: user.id,
+
                     username,
+
                     bio:
                         profileBio.value.trim(),
+
                     country:
                         profileCountry.value.trim(),
+
                     x_username:
-                        formatSocialUsername(
+                        profileFormatSocialUsername(
                             profileX.value
                         ),
+
                     telegram_username:
-                        formatSocialUsername(
+                        profileFormatSocialUsername(
                             profileTelegram.value
                         ),
+
                     avatar_url:
                         existingProfile?.avatar_url ||
                         user.user_metadata
                             ?.avatar_url ||
                         "",
+
+                    role:
+                        existingProfile?.role ||
+                        "Member",
+
+                    membership:
+                        existingProfile?.membership ||
+                        "Free",
+
+                    points:
+                        existingProfile?.points || 0,
+
+                    missions:
+                        existingProfile?.missions || 0,
+
+                    badges:
+                        existingProfile?.badges || 0,
+
                     updated_at:
                         new Date().toISOString()
-                });
+                };
 
-            if (saveError) {
+                const {
+                    error: saveError
+                } = await supabaseClient
+                    .from("profiles")
+                    .upsert(
+                        profileInformation,
+                        {
+                            onConflict: "id"
+                        }
+                    );
+
+                if (saveError) {
+                    throw saveError;
+                }
+
+                const {
+                    error: metadataError
+                } = await supabaseClient.auth
+                    .updateUser({
+                        data: {
+                            username
+                        }
+                    });
+
+                if (metadataError) {
+                    console.warn(
+                        "Username metadata was not updated:",
+                        metadataError
+                    );
+                }
+
+                updateProfilePreview();
+
                 profileMessage.textContent =
-                    saveError.message;
+                    "Profile saved successfully ✅";
+            } catch (error) {
+                console.error(
+                    "Profile saving error:",
+                    error
+                );
 
+                profileMessage.textContent =
+                    error.message ||
+                    "Unable to save your profile.";
+            } finally {
                 saveProfileButton.disabled =
                     false;
 
                 saveProfileButton.textContent =
                     "Save Profile";
-
-                return;
             }
-
-            updateProfilePreview();
-
-            profileMessage.textContent =
-                "Profile saved successfully ✅";
-
-            saveProfileButton.disabled =
-                false;
-
-            saveProfileButton.textContent =
-                "Save Profile";
         }
     );
+
+    // ----------------------------------------
+    // Avatar upload
+    // ----------------------------------------
+
+    if (
+        avatarFile &&
+        uploadAvatarButton &&
+        avatarMessage
+    ) {
+        uploadAvatarButton.addEventListener(
+            "click",
+            async (event) => {
+                event.preventDefault();
+
+                const file =
+                    avatarFile.files[0];
+
+                if (!file) {
+                    avatarMessage.textContent =
+                        "Please select an image first.";
+
+                    return;
+                }
+
+                const allowedTypes = [
+                    "image/jpeg",
+                    "image/png",
+                    "image/webp"
+                ];
+
+                if (
+                    !allowedTypes.includes(
+                        file.type
+                    )
+                ) {
+                    avatarMessage.textContent =
+                        "Only JPG, PNG and WEBP images are allowed.";
+
+                    return;
+                }
+
+                const maximumSize =
+                    2 * 1024 * 1024;
+
+                if (
+                    file.size >
+                    maximumSize
+                ) {
+                    avatarMessage.textContent =
+                        "The image must be smaller than 2 MB.";
+
+                    return;
+                }
+
+                uploadAvatarButton.disabled =
+                    true;
+
+                uploadAvatarButton.textContent =
+                    "Uploading...";
+
+                avatarMessage.textContent =
+                    "Uploading profile photo...";
+
+                try {
+                    const {
+                        data: userData,
+                        error: userError
+                    } = await supabaseClient.auth
+                        .getUser();
+
+                    if (
+                        userError ||
+                        !userData.user
+                    ) {
+                        window.location.href =
+                            "login.html";
+
+                        return;
+                    }
+
+                    const user =
+                        userData.user;
+
+                    const fileExtension =
+                        file.name
+                            .split(".")
+                            .pop()
+                            .toLowerCase();
+
+                    const filePath =
+                        `${user.id}/avatar.${fileExtension}`;
+
+                    const {
+                        error: uploadError
+                    } = await supabaseClient.storage
+                        .from("avatars")
+                        .upload(
+                            filePath,
+                            file,
+                            {
+                                cacheControl:
+                                    "3600",
+
+                                upsert:
+                                    true,
+
+                                contentType:
+                                    file.type
+                            }
+                        );
+
+                    if (uploadError) {
+                        throw uploadError;
+                    }
+
+                    const {
+                        data: publicUrlData
+                    } = supabaseClient.storage
+                        .from("avatars")
+                        .getPublicUrl(
+                            filePath
+                        );
+
+                    const avatarUrl =
+                        `${publicUrlData.publicUrl}?v=${Date.now()}`;
+
+                    const {
+                        data: existingProfile,
+                        error: profileReadError
+                    } = await supabaseClient
+                        .from("profiles")
+                        .select("*")
+                        .eq("id", user.id)
+                        .maybeSingle();
+
+                    if (profileReadError) {
+                        throw profileReadError;
+                    }
+
+                    const username =
+                        existingProfile?.username ||
+                        user.user_metadata
+                            ?.username ||
+                        profileUsername.value
+                            .trim() ||
+                        "Member";
+
+                    const {
+                        error: profileUpdateError
+                    } = await supabaseClient
+                        .from("profiles")
+                        .upsert(
+                            {
+                                id:
+                                    user.id,
+
+                                username,
+
+                                bio:
+                                    existingProfile?.bio ||
+                                    profileBio.value.trim(),
+
+                                country:
+                                    existingProfile?.country ||
+                                    profileCountry.value.trim(),
+
+                                x_username:
+                                    existingProfile?.x_username ||
+                                    profileFormatSocialUsername(
+                                        profileX.value
+                                    ),
+
+                                telegram_username:
+                                    existingProfile
+                                        ?.telegram_username ||
+                                    profileFormatSocialUsername(
+                                        profileTelegram.value
+                                    ),
+
+                                avatar_url:
+                                    avatarUrl,
+
+                                role:
+                                    existingProfile?.role ||
+                                    "Member",
+
+                                membership:
+                                    existingProfile
+                                        ?.membership ||
+                                    "Free",
+
+                                points:
+                                    existingProfile?.points ||
+                                    0,
+
+                                missions:
+                                    existingProfile?.missions ||
+                                    0,
+
+                                badges:
+                                    existingProfile?.badges ||
+                                    0,
+
+                                updated_at:
+                                    new Date()
+                                        .toISOString()
+                            },
+                            {
+                                onConflict: "id"
+                            }
+                        );
+
+                    if (profileUpdateError) {
+                        throw profileUpdateError;
+                    }
+
+                    const {
+                        error: metadataError
+                    } = await supabaseClient.auth
+                        .updateUser({
+                            data: {
+                                avatar_url:
+                                    avatarUrl
+                            }
+                        });
+
+                    if (metadataError) {
+                        console.warn(
+                            "Avatar metadata was not updated:",
+                            metadataError
+                        );
+                    }
+
+                    renderProfileAvatar(
+                        avatarUrl,
+                        username
+                    );
+
+                    avatarMessage.textContent =
+                        "Profile photo uploaded successfully ✅";
+
+                    avatarFile.value =
+                        "";
+                } catch (error) {
+                    console.error(
+                        "Avatar upload error:",
+                        error
+                    );
+
+                    avatarMessage.textContent =
+                        error.message ||
+                        "Unable to upload the profile photo.";
+                } finally {
+                    uploadAvatarButton.disabled =
+                        false;
+
+                    uploadAvatarButton.textContent =
+                        "Upload Photo";
+                }
+            }
+        );
+    }
 
     loadProfile();
 }
 
-// ----------------------
-// Avatar Upload
-// ----------------------
-
-const avatarFile =
-    document.getElementById("avatarFile");
-
-const uploadAvatarButton =
-    document.getElementById(
-        "uploadAvatarButton"
-    );
-
-const avatarMessage =
-    document.getElementById(
-        "avatarMessage"
-    );
-
-if (
-    avatarFile &&
-    uploadAvatarButton &&
-    avatarMessage
-) {
-    uploadAvatarButton.addEventListener(
-        "click",
-        async (event) => {
-            event.preventDefault();
-
-            const file =
-                avatarFile.files[0];
-
-            if (!file) {
-                avatarMessage.textContent =
-                    "Please select an image first.";
-                return;
-            }
-
-            const allowedTypes = [
-                "image/jpeg",
-                "image/png",
-                "image/webp"
-            ];
-
-            if (
-                !allowedTypes.includes(
-                    file.type
-                )
-            ) {
-                avatarMessage.textContent =
-                    "Only JPG, PNG and WEBP images are allowed.";
-                return;
-            }
-
-            const maximumSize =
-                2 * 1024 * 1024;
-
-            if (file.size > maximumSize) {
-                avatarMessage.textContent =
-                    "The image must be smaller than 2 MB.";
-                return;
-            }
-
-            uploadAvatarButton.disabled =
-                true;
-
-            uploadAvatarButton.textContent =
-                "Uploading...";
-
-            avatarMessage.textContent =
-                "Uploading profile photo...";
-
-            const {
-                data: userData,
-                error: userError
-            } = await supabaseClient.auth
-                .getUser();
-
-            if (
-                userError ||
-                !userData.user
-            ) {
-                window.location.href =
-                    "login.html";
-                return;
-            }
-
-            const user =
-                userData.user;
-
-            const fileExtension =
-                file.name
-                    .split(".")
-                    .pop()
-                    .toLowerCase();
-
-            const filePath =
-                `${user.id}/avatar.${fileExtension}`;
-
-            const {
-                error: uploadError
-            } = await supabaseClient.storage
-                .from("avatars")
-                .upload(
-                    filePath,
-                    file,
-                    {
-                        cacheControl: "3600",
-                        upsert: true,
-                        contentType:
-                            file.type
-                    }
-                );
-
-            if (uploadError) {
-                avatarMessage.textContent =
-                    uploadError.message;
-
-                uploadAvatarButton.disabled =
-                    false;
-
-                uploadAvatarButton.textContent =
-                    "Upload Photo";
-
-                return;
-            }
-
-            const {
-                data: publicUrlData
-            } = supabaseClient.storage
-                .from("avatars")
-                .getPublicUrl(filePath);
-
-            const avatarUrl =
-                `${publicUrlData.publicUrl}?v=${Date.now()}`;
-
-            const {
-                error: profileUpdateError
-            } = await supabaseClient
-                .from("profiles")
-                .upsert({
-                    id: user.id,
-                    avatar_url: avatarUrl,
-                    updated_at:
-                        new Date().toISOString()
-                });
-
-            if (profileUpdateError) {
-                avatarMessage.textContent =
-                    profileUpdateError.message;
-
-                uploadAvatarButton.disabled =
-                    false;
-
-                uploadAvatarButton.textContent =
-                    "Upload Photo";
-
-                return;
-            }
-
-            await supabaseClient.auth
-                .updateUser({
-                    data: {
-                        avatar_url:
-                            avatarUrl
-                    }
-                });
-
-            const previewImage =
-                document.getElementById(
-                    "profilePreviewImage"
-                );
-
-            const previewInitials =
-                document.getElementById(
-                    "profilePreviewInitials"
-                );
-
-            if (previewImage) {
-                previewImage.src =
-                    avatarUrl;
-
-                previewImage.hidden =
-                    false;
-            }
-
-            if (previewInitials) {
-                previewInitials.hidden =
-                    true;
-            }
-
-            const headerAvatar =
-                document.getElementById(
-                    "profileHeaderAvatar"
-                );
-
-            if (headerAvatar) {
-                headerAvatar.innerHTML =
-                    "";
-
-                const image =
-                    document.createElement(
-                        "img"
-                    );
-
-                image.src =
-                    avatarUrl;
-
-                image.alt =
-                    "Profile avatar";
-
-                headerAvatar.appendChild(
-                    image
-                );
-            }
-
-            avatarMessage.textContent =
-                "Profile photo uploaded successfully ✅";
-
-            avatarFile.value = "";
-
-            uploadAvatarButton.disabled =
-                false;
-
-            uploadAvatarButton.textContent =
-                "Upload Photo";
-        }
-    );
-}
+// ----------------------------------------
+// Logout
+// ----------------------------------------
 
 if (profileLogoutButton) {
     profileLogoutButton.addEventListener(
         "click",
         async () => {
-            await supabaseClient.auth.signOut();
+            await supabaseClient.auth
+                .signOut();
 
             window.location.href =
                 "login.html";
