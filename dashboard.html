@@ -8,6 +8,11 @@
         content="width=device-width, initial-scale=1.0"
     >
 
+    <meta
+        name="theme-color"
+        content="#070b18"
+    >
+
     <title>TacoCat Members Dashboard</title>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -17,6 +22,14 @@
 
 <body class="dashboard-page">
 
+    <!-- Animated background -->
+    <div class="space-background" aria-hidden="true">
+        <div class="space-glow space-glow-one"></div>
+        <div class="space-glow space-glow-two"></div>
+        <div class="stars stars-small"></div>
+        <div class="stars stars-large"></div>
+    </div>
+
     <div class="app-layout">
 
         <!-- Mobile menu button -->
@@ -24,65 +37,123 @@
             id="menuButton"
             class="menu-button"
             type="button"
-            aria-label="Open menu"
+            aria-label="Open navigation menu"
+            aria-expanded="false"
         >
-            ☰
+            <span></span>
+            <span></span>
+            <span></span>
         </button>
 
         <!-- Sidebar -->
         <aside id="sidebar" class="sidebar">
 
             <div class="sidebar-brand">
-                <div class="brand-icon">🌮</div>
+                <div class="brand-icon">
+                    🌮
+                </div>
 
-                <div>
+                <div class="brand-copy">
                     <h1>TacoCat</h1>
                     <span>Members Portal</span>
                 </div>
             </div>
 
+            <div class="sidebar-signal">
+                <span class="signal-pulse"></span>
+
+                <div>
+                    <small>Signal status</small>
+                    <strong>Online</strong>
+                </div>
+            </div>
+
             <nav class="sidebar-nav">
 
-                <a class="nav-link active" href="dashboard.html">
-                    <span>🏠</span>
-                    Dashboard
+                <a
+                    class="nav-link active"
+                    href="dashboard.html"
+                >
+                    <span class="nav-icon">⌂</span>
+
+                    <span class="nav-text">
+                        Dashboard
+                    </span>
                 </a>
 
-                <a class="nav-link" href="profile.html">
-                    <span>👤</span>
-                    My Profile
+                <a
+                    class="nav-link"
+                    href="profile.html"
+                >
+                    <span class="nav-icon">◉</span>
+
+                    <span class="nav-text">
+                        My Profile
+                    </span>
                 </a>
 
-                <a class="nav-link" href="#membershipCard">
-                    <span>💎</span>
-                    Account Status
+                <a
+                    class="nav-link"
+                    href="#membershipCard"
+                >
+                    <span class="nav-icon">◆</span>
+
+                    <span class="nav-text">
+                        Account Status
+                    </span>
                 </a>
 
-                <a class="nav-link" href="#communityCard">
-                    <span>🏆</span>
-                    Community
+                <a
+                    class="nav-link"
+                    href="#communityCard"
+                >
+                    <span class="nav-icon">★</span>
+
+                    <span class="nav-text">
+                        Community
+                    </span>
                 </a>
 
             </nav>
 
-            <button
-                id="logoutButton"
-                class="sidebar-logout"
-                type="button"
-            >
-                <span>🚪</span>
-                Logout
-            </button>
+            <div class="sidebar-footer">
+
+                <div class="sidebar-version">
+                    <span>Command System</span>
+                    <strong>Version 2.0</strong>
+                </div>
+
+                <button
+                    id="logoutButton"
+                    class="sidebar-logout"
+                    type="button"
+                >
+                    <span>↪</span>
+                    Logout
+                </button>
+
+            </div>
 
         </aside>
+
+        <!-- Sidebar mobile overlay -->
+        <button
+            id="sidebarOverlay"
+            class="sidebar-overlay"
+            type="button"
+            aria-label="Close navigation menu"
+        ></button>
 
         <!-- Main dashboard -->
         <main class="dashboard-main">
 
-            <header class="dashboard-header">
+            <!-- Top header -->
+            <header class="dashboard-topbar">
 
                 <div>
-                    <p class="eyebrow">TACO CREW COMMAND CENTER</p>
+                    <p class="eyebrow">
+                        TACO CREW COMMAND CENTER
+                    </p>
 
                     <h2>Member Dashboard</h2>
 
@@ -91,33 +162,206 @@
                     </p>
                 </div>
 
-                <div class="header-avatar" id="headerAvatar">
-                    TC
+                <div class="topbar-actions">
+
+                    <div class="system-time">
+                        <small>System</small>
+                        <strong>Connected</strong>
+                    </div>
+
+                    <div
+                        class="header-avatar"
+                        id="headerAvatar"
+                    >
+                        TC
+                    </div>
+
                 </div>
 
             </header>
 
-            <!-- Overview cards -->
+            <!-- Hero -->
+            <section class="dashboard-hero">
+
+                <div class="hero-grid-pattern"></div>
+
+                <div class="hero-content">
+
+                    <div class="hero-copy">
+
+                        <div class="hero-status">
+                            <span class="hero-status-dot"></span>
+                            CREW CONNECTION ACTIVE
+                        </div>
+
+                        <p class="hero-kicker">
+                            WELCOME TO THE SIGNAL
+                        </p>
+
+                        <h3>
+                            Your TacoCat journey
+                            <span>starts here.</span>
+                        </h3>
+
+                        <p class="hero-description">
+                            Explore your account, track your crew
+                            progress and prepare for future missions
+                            across the TacoCat Universe.
+                        </p>
+
+                        <div class="hero-actions">
+
+                            <a
+                                class="primary-dashboard-button"
+                                href="profile.html"
+                            >
+                                View My Profile
+                                <span>→</span>
+                            </a>
+
+                            <a
+                                class="ghost-dashboard-button"
+                                href="#communityCard"
+                            >
+                                Crew Progress
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                    <div class="hero-level-card">
+
+                        <div class="level-orbit">
+
+                            <div class="level-orbit-ring"></div>
+
+                            <div class="level-core">
+                                <small>LEVEL</small>
+                                <strong>1</strong>
+                            </div>
+
+                        </div>
+
+                        <div class="level-information">
+
+                            <div class="level-heading">
+                                <div>
+                                    <small>Current rank</small>
+                                    <strong>Explorer</strong>
+                                </div>
+
+                                <span>0 XP</span>
+                            </div>
+
+                            <div class="xp-progress">
+                                <div class="xp-progress-fill"></div>
+                            </div>
+
+                            <div class="xp-labels">
+                                <span>0 XP</span>
+                                <span>100 XP</span>
+                            </div>
+
+                            <div class="next-reward">
+                                <span>Next reward</span>
+                                <strong>Explorer Badge</strong>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <!-- Quick statistics -->
+            <section class="quick-stats">
+
+                <article class="quick-stat-card">
+                    <div class="quick-stat-icon">✦</div>
+
+                    <div>
+                        <span>Signal Connection</span>
+                        <strong>Active</strong>
+                    </div>
+                </article>
+
+                <article class="quick-stat-card">
+                    <div class="quick-stat-icon">◎</div>
+
+                    <div>
+                        <span>Crew Rank</span>
+                        <strong>Explorer</strong>
+                    </div>
+                </article>
+
+                <article class="quick-stat-card">
+                    <div class="quick-stat-icon">◇</div>
+
+                    <div>
+                        <span>Account Plan</span>
+                        <strong>Free Member</strong>
+                    </div>
+                </article>
+
+                <article class="quick-stat-card">
+                    <div class="quick-stat-icon">⌁</div>
+
+                    <div>
+                        <span>System Status</span>
+                        <strong>Operational</strong>
+                    </div>
+                </article>
+
+            </section>
+
+            <!-- Dashboard cards -->
             <section class="dashboard-grid">
 
+                <!-- Profile -->
                 <article class="dashboard-card profile-card">
 
+                    <div class="card-top-line"></div>
+
                     <div class="card-heading">
+
                         <div>
-                            <p class="card-label">PROFILE</p>
+                            <p class="card-label">
+                                MEMBER PROFILE
+                            </p>
+
                             <h3>Member Information</h3>
                         </div>
 
-                        <span class="card-icon">👤</span>
+                        <span class="card-icon">
+                            ◉
+                        </span>
+
                     </div>
 
                     <div class="profile-summary">
 
-                        <div class="profile-avatar" id="profileAvatar">
-                            TC
+                        <div class="profile-avatar-shell">
+
+                            <div
+                                class="profile-avatar"
+                                id="profileAvatar"
+                            >
+                                TC
+                            </div>
+
+                            <span class="avatar-online-dot"></span>
+
                         </div>
 
-                        <div>
+                        <div class="profile-summary-copy">
+
+                            <span class="member-status-tag">
+                                ACTIVE MEMBER
+                            </span>
+
                             <h4 id="dashboardUsername">
                                 Member
                             </h4>
@@ -125,6 +369,7 @@
                             <p id="dashboardEmail">
                                 Loading email...
                             </p>
+
                         </div>
 
                     </div>
@@ -149,24 +394,38 @@
 
                     </div>
 
-                    <a class="secondary-button" href="profile.html">
+                    <a
+                        class="secondary-button"
+                        href="profile.html"
+                    >
                         Edit Profile
+                        <span>→</span>
                     </a>
 
                 </article>
 
+                <!-- Account status -->
                 <article
                     id="membershipCard"
-                    class="dashboard-card"
+                    class="dashboard-card account-card"
                 >
 
+                    <div class="card-top-line"></div>
+
                     <div class="card-heading">
+
                         <div>
-                            <p class="card-label">ACCOUNT</p>
+                            <p class="card-label">
+                                ACCOUNT
+                            </p>
+
                             <h3>Account Status</h3>
                         </div>
 
-                        <span class="card-icon">💎</span>
+                        <span class="card-icon">
+                            ◆
+                        </span>
+
                     </div>
 
                     <div class="status-box">
@@ -180,6 +439,21 @@
                                 Registered
                             </strong>
                         </div>
+
+                        <span class="status-badge">
+                            ONLINE
+                        </span>
+
+                    </div>
+
+                    <div class="plan-display">
+
+                        <div>
+                            <small>Current plan</small>
+                            <strong>Free Member</strong>
+                        </div>
+
+                        <span>◇</span>
 
                     </div>
 
@@ -205,77 +479,156 @@
 
                 </article>
 
+                <!-- Community -->
                 <article
                     id="communityCard"
-                    class="dashboard-card"
+                    class="dashboard-card community-card"
                 >
 
+                    <div class="card-top-line"></div>
+
                     <div class="card-heading">
+
                         <div>
-                            <p class="card-label">COMMUNITY</p>
+                            <p class="card-label">
+                                COMMUNITY
+                            </p>
+
                             <h3>Crew Progress</h3>
                         </div>
 
-                        <span class="card-icon">🏆</span>
+                        <span class="card-icon">
+                            ★
+                        </span>
+
                     </div>
 
                     <div class="stats-grid">
 
                         <div class="stat-box">
-                            <strong>0</strong>
+                            <div class="stat-icon">✦</div>
+
+                            <strong id="dashboardPoints">
+                                0
+                            </strong>
+
                             <span>Points</span>
                         </div>
 
                         <div class="stat-box">
-                            <strong>0</strong>
+                            <div class="stat-icon">◎</div>
+
+                            <strong id="dashboardMissions">
+                                0
+                            </strong>
+
                             <span>Missions</span>
                         </div>
 
                         <div class="stat-box">
-                            <strong>0</strong>
+                            <div class="stat-icon">★</div>
+
+                            <strong id="dashboardBadges">
+                                0
+                            </strong>
+
                             <span>Badges</span>
                         </div>
 
                     </div>
 
-                    <p class="card-note">
-                        Community achievements will appear here
-                        as new features are activated.
-                    </p>
+                    <div class="achievement-preview">
+
+                        <div class="achievement-icon">
+                            🔒
+                        </div>
+
+                        <div>
+                            <small>Next achievement</small>
+                            <strong>First Explorer</strong>
+                            <p>
+                                Complete your first mission to unlock.
+                            </p>
+                        </div>
+
+                    </div>
 
                 </article>
 
-                <article class="dashboard-card transmission-card">
+                <!-- Transmission -->
+                <article
+                    class="dashboard-card transmission-card"
+                >
+
+                    <div class="transmission-noise"></div>
 
                     <div class="card-heading">
+
                         <div>
-                            <p class="card-label">SIGNAL</p>
+                            <p class="card-label">
+                                SIGNAL
+                            </p>
+
                             <h3>Latest Transmission</h3>
                         </div>
 
-                        <span class="card-icon">📡</span>
+                        <span class="card-icon signal-icon">
+                            ⌁
+                        </span>
+
                     </div>
 
-                    <div class="transmission-message">
-                        <span>TRANSMISSION RECEIVED</span>
+                    <div class="transmission-screen">
+
+                        <div class="transmission-header">
+                            <span>
+                                TRANSMISSION RECEIVED
+                            </span>
+
+                            <div class="transmission-bars">
+                                <i></i>
+                                <i></i>
+                                <i></i>
+                                <i></i>
+                            </div>
+                        </div>
 
                         <p>
                             Welcome to the TacoCat Crew command
                             center. Your account connection is active.
                         </p>
+
+                        <div class="transmission-code">
+                            SIGNAL ID: TC-001
+                        </div>
+
                     </div>
 
                 </article>
 
             </section>
 
+            <footer class="dashboard-footer">
+
+                <p>
+                    TacoCat Members Portal
+                    <span>•</span>
+                    Signal connection secured
+                </p>
+
+                <span>
+                    TACO CREW SYSTEM
+                </span>
+
+            </footer>
+
         </main>
 
     </div>
 
     <script src="supabase.js"></script>
-<script src="utils.js"></script>
-<script src="dashboard.js"></script>
+    <script src="utils.js"></script>
+    <script src="dashboard.js"></script>
 
     <script>
         const menuButton =
@@ -284,10 +637,69 @@
         const sidebar =
             document.getElementById("sidebar");
 
-        if (menuButton && sidebar) {
-            menuButton.addEventListener("click", () => {
+        const sidebarOverlay =
+            document.getElementById("sidebarOverlay");
+
+        function toggleSidebar() {
+            const isOpen =
                 sidebar.classList.toggle("sidebar-open");
-            });
+
+            sidebarOverlay.classList.toggle(
+                "sidebar-overlay-visible",
+                isOpen
+            );
+
+            menuButton.setAttribute(
+                "aria-expanded",
+                String(isOpen)
+            );
+
+            document.body.classList.toggle(
+                "menu-open",
+                isOpen
+            );
+        }
+
+        function closeSidebar() {
+            sidebar.classList.remove("sidebar-open");
+
+            sidebarOverlay.classList.remove(
+                "sidebar-overlay-visible"
+            );
+
+            menuButton.setAttribute(
+                "aria-expanded",
+                "false"
+            );
+
+            document.body.classList.remove(
+                "menu-open"
+            );
+        }
+
+        if (
+            menuButton &&
+            sidebar &&
+            sidebarOverlay
+        ) {
+            menuButton.addEventListener(
+                "click",
+                toggleSidebar
+            );
+
+            sidebarOverlay.addEventListener(
+                "click",
+                closeSidebar
+            );
+
+            document
+                .querySelectorAll(".sidebar .nav-link")
+                .forEach((link) => {
+                    link.addEventListener(
+                        "click",
+                        closeSidebar
+                    );
+                });
         }
     </script>
 
