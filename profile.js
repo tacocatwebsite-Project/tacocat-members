@@ -1,3 +1,40 @@
+// Backup utilities for the Profile page.
+// These prevent the page from failing if utils.js is not loaded.
+
+function profileFormatSocialUsername(value) {
+    const cleanedValue = (value || "").trim();
+
+    if (!cleanedValue) {
+        return "";
+    }
+
+    return cleanedValue.startsWith("@")
+        ? cleanedValue
+        : `@${cleanedValue}`;
+}
+
+function profileCreateInitials(username) {
+    const cleanedUsername = (username || "").trim();
+
+    if (!cleanedUsername) {
+        return "TC";
+    }
+
+    const words = cleanedUsername
+        .split(/\s+/)
+        .filter(Boolean);
+
+    if (words.length >= 2) {
+        return (
+            words[0][0] +
+            words[1][0]
+        ).toUpperCase();
+    }
+
+    return cleanedUsername
+        .substring(0, 2)
+        .toUpperCase();
+}
 const profileForm =
     document.getElementById("profileForm");
 
